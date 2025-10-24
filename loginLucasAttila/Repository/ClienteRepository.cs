@@ -17,12 +17,52 @@ namespace loginLucasAttila.Repository
         }
         public void Ativar(int id)
         {
-            throw new NotImplementedException();
+            string Situacao = SituacaoConstantes.Ativo;
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
+            {
+                conexao.Open();
+                MySqlCommand cmd = new MySqlCommand("update Cliente set Situacao=@Situacao WHERE Id=@Id ", conexao);
+
+                cmd.Parameters.Add("@Id", MySqlDbType.VarChar).Value = Id;
+                cmd.Parameters.Add("@Situacao", MySqlDbType.VarChar).Value = Situacao;
+                cmd.ExecuteNonQuery();
+                conexao.Close();
+            }
         }
 
         public void Atualizar(Cliente cliente)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string Situacao = SituacaoConstantes.Ativo;
+                using (var conexao = new MySqlConnection(_conexaoMySQL))
+                {
+                    conexao.Open();
+                    MySqlCommand cmd = new MySqlCommand("update Cliente set Nome=@Nome, Nascimento=@Nascimento, Sexo=@Sexo,  CPF=@CPF, " +
+                        " Telefone=@Telefone, Email=@Email, Senha=@Senha, Situacao=@Situacao WHERE Id=@Id ", conexao);
+
+                    cmd.Parameters.Add("@Id", MySqlDbType.VarChar).Value = cliente.Id;
+                    cmd.Parameters.Add("@Nome", MySqlDbType.VarChar).Value = cliente.Nome;
+                    cmd.Parameters.Add("@Nascimento", MySqlDbType.DateTime).Value = cliente.Nascimento.ToString("yyyy/MM/dd");
+                    cmd.Parameters.Add("@Sexo", MySqlDbType.VarChar).Value = cliente.Sexo;
+                    cmd.Parameters.Add("@CPF", MySqlDbType.VarChar).Value = cliente.CPF;
+                    cmd.Parameters.Add("@Telefone", MySqlDbType.VarChar).Value = cliente.Telefone;
+                    cmd.Parameters.Add("@Email", MySqlDbType.VarChar).Value = cliente.Email;
+                    cmd.Parameters.Add("@Senha", MySqlDbType.VarChar).Value = cliente.Senha;
+                    cmd.Parameters.Add("@Situacao", MySqlDbType.VarChar).Value = Situacao;
+                    cmd.ExecuteNonQuery();
+                    conexao.Close();
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                throw new Exception("Erro no banco ao atualizar cliente" + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro na aplicação ao atualizar cliente" + ex.Message);
+            }
         }
 
         public Cliente BuscaCpfCliente(string CPF)
@@ -74,7 +114,17 @@ namespace loginLucasAttila.Repository
 
         public void Desativar(int id)
         {
-            throw new NotImplementedException();
+            string Situacao = SituacaoConstantes.Desativo;
+            using (var conexao = new MySqlConnection(_conexaoMySQL))
+            {
+                conexao.Open();
+                MySqlCommand cmd = new MySqlCommand("update Cliente set Situacao=@Situacao WHERE Id=@Id ", conexao);
+
+                cmd.Parameters.Add("@Id", MySqlDbType.VarChar).Value = Id;
+                cmd.Parameters.Add("@Situacao", MySqlDbType.VarChar).Value = Situacao;
+                cmd.ExecuteNonQuery();
+                conexao.Close();
+            }
         }
 
         public void Excluir(int id)
